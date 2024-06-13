@@ -2,197 +2,6 @@
 
 
 
- 
-
-
-
-Term work of
-
-Compiler Design Lab (PCS-601)
-
-
-
-Submitted in partial fulfillment of the requirement for the VI semester of
-
-Bachelor of Technology (Computer Science & Engineering)
-
-
-
-
-
-By
-
-
-
-
-
-Shailesh Rautela University Roll No 2161307
-
-Under the Guidance of Ms. Megha Upreti  Lecturer
-
-Department of Computer Science & Engineering
-
-
-
-
-
-
-
-
-
-
-
-DEPARTMENT OF COMPUTER SCIENCE & ENGINEERING GRAPHIC ERA HILL UNIVERSITY, BHIMTAL CAMPUS
-
-SATTAL ROAD, P.O. BHOWALI DISTRICT- NAINITAL-263132 2023-2024
-
- 
-
-
-
-
-
-CERTIFICATE
-
-
-
-
-
-
-
-
-
-The term work of Compiler Design Lab (PCS-601), being submitted by Shailesh Rautela, Roll no
-
-2161307 to Graphic Era Hill University Bhimtal Campus for the award of bona fide work carried out  by
-
-him. He has worked under my guidance and supervision and fulfilled the requirement for the
-
-submission of this work report.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(…………………)
-
-
-
-Ms. Megha Upreti
-
- 
-
-
-
-ACKNOWLEDGEMENT
-
-
-
-
-
-
-
-I take immense pleasure in thanking Ms. Megha Upreti (Lecturer , CS, GEHU Bhimtal Campus) for allowing us to carry out this project work under his excellent and optimistic supervision. This has all been possible due to her novel inspiration, able guidance and useful suggestions that have helped me in developing my subject concepts as a student.
-
-I want to extend thanks to our President “Prof. (Dr.) Kamal Ghanshala” for providing us all infrastructure and facilities to work in need without which this work would not be possible.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-SHAILESH RAUTELA
-
- 
-
-STUDENT’S DECLARATION
-
-
-
-
-
-
-
-
-
-
-
-I, Shailesh Rautela hereby declare the work, which is being presented in the report, entitled Term work of Compiler Design Lab (PCS-601) in partial fulfillment of the requirement for the award of the degree Bachelor of Technology (Computer Science) in the session 2023-2024 for semester VI, is an authentic record of my own work carried out under the supervision of Ms. Megha Upreti (Lecturer , Graphic Era Hill University, Bhimtal)
-
-The matter embodied in this project has not been submitted by me for the award of any other degree.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Date: …………	……………….
-
-
-
-(Full signature of student)
-
- 
-		
-
- 
-
-
-
 1.	Write a program in C or C++ language for the following functions without using string.h header file:
 
 a: "to get the length of a string, you use the strlen() function"
@@ -1179,10 +988,6 @@ return	0;
 
  
 
-
-
-
-
 7.	Write a program in C or C++ language to find the FIRST and FOLLOW of all the variables. Create functions for FIRST and FOLLOW.
 
 
@@ -1349,4 +1154,605 @@ for (const auto &pair : grammar) { char variable = pair.first;
 
 if  (followSets.find(variable)  ==  followSets.end())  {
 
-set<char> followSet; addFollow(variable, followSet); fol
+set<char> followSet; addFollow(variable, followSet); followSets[variable]	=	followSet;
+
+}
+
+}
+
+}
+
+
+
+void addFollow(char symbol, set<char> &followSet)  { for (const auto &pair : grammar) {
+
+char variable = pair.first;
+
+for (const string &production :  pair.second) {
+
+for (size_t i = 0; i < production.length(); ++i) { if (production[i] == symbol) {
+
+if (i + 1 < production.length()) {
+
+char   nextSymbol	=	production[i	+	1]; if (islower(nextSymbol) || nextSymbol
+
+ 
+
+== ' ε ') {
+
+
+
+
+
+
+
+firstSets[nextSymbol]; firstSet.end());
+
+ 
+
+
+
+followSet.insert(nextSymbol);
+
+} else {
+
+set<char> firstSet = followSet.insert(firstSet.begin(), followSet.erase('ε');
+
+ 
+
+if (firstSet.find('ε') != firstSet.end() && variable != symbol) {
+
+if (followSets.find(variable)
+
+ 
+
+== followSets.end()) { variableFollowSet; variableFollowSet); variableFollowSet;
+
+ 
+
+
+
+set<char> addFollow(variable, followSets[variable] =
+
+}
+
+ 
+
+
+
+followSet.insert(followSets[variable].begin(), followSets[variable].end());
+
+}
+
+}
+
+} else if (variable != symbol) {
+
+ 
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+followSets.end())  {
+
+
+
+variableFollowSet); variableFollowSet;
+
+ 
+
+
+
+if  (followSets.find(variable)  ==
+
+
+
+set<char>	variableFollowSet; addFollow(variable,
+
+
+
+followSets[variable]  =
+
+ 
+
+}
+
+
+
+followSet.insert(followSets[variable].begin(), followSets[variable].end());
+
+}
+
+}
+
+}
+
+}
+
+}
+
+}
+
+ 
+
+
+
+
+
+8.	Write a program in C or C++ language to implement LR Parser.
+
+
+
+#include <iostream> #include <stack> #include <map> #include <vector> #include <string>
+
+
+
+using namespace std;
+
+
+
+// Define the grammar struct Production {
+
+char lhs; string	rhs;
+
+};
+
+
+
+// Define the parser tables
+
+map<pair<int,	char>,	string>	actionTable; map<pair<int, char>, int> gotoTable;
+
+
+
+// Function to initialize the parser tables  for  the  given grammar
+
+void	initializeTables()	{
+
+// Action Table
+
+actionTable[{0,	'a'}]	=	"s3";
+
+actionTable[{0,	'b'}]	=	"s4";
+
+actionTable[{1,	'$'}]	=	"acc";
+
+actionTable[{2,	'a'}]	=	"s3";
+
+actionTable[{2,	'b'}]	=	"s4";
+
+actionTable[{3,	'a'}]	=	"s3";
+
+actionTable[{3, 'b'}] = "s4";
+
+actionTable[{4, 'a'}] = "r3"; // A -> b
+
+actionTable[{4, 'b'}] = "r3";
+
+actionTable[{4, '$'}] = "r3";
+
+actionTable[{5,  'a'}]  =  "r1";  //  S  ->  AA
+
+actionTable[{5, 'b'}] = "r1";
+
+actionTable[{5, '$'}] = "r1";
+
+actionTable[{6, 'a'}] = "r2"; // A -> aA
+
+actionTable[{6, 'b'}] = "r2";
+
+actionTable[{6, '$'}] = "r2";
+
+
+
+// Goto Table gotoTable[{0,	'S'}]	=	1;
+
+gotoTable[{0,	'A'}]	=	2;
+
+gotoTable[{2,	'A'}]	=	5;
+
+gotoTable[{3, 'A'}] = 6;
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+// Main parser function
+
+bool parse(const vector<char>& input) { stack<int> stateStack;
+
+stack<char> symbolStack; stateStack.push(0);
+
+int ip = 0;
+
+
+
+while (true) {
+
+int	currentState	=	stateStack.top(); char currentInput = input[ip];
+
+
+
+string	action	=	actionTable[{currentState, currentInput}];
+
+
+
+if (action[0] == 's') {
+
+int	nextState	=	stoi(action.substr(1)); stateStack.push(nextState); symbolStack.push(currentInput);
+
+ip++;
+
+} else if (action[0] == 'r') {
+
+int  productionNumber = stoi(action.substr(1));
+
+// Production rules for the new grammar vector<Production> productions = {
+
+{'S', "AA"},
+
+{'A', "aA"},
+
+{'A', "b"} };
+
+
+
+Production production = productions[productionNumber - 1];
+
+for (int i = 0; i < production.rhs.length(); i++)
+
+{
+
+stateStack.pop(); symbolStack.pop(); }
+
+symbolStack.push(production.lhs);
+
+
+
+int gotoState = gotoTable[{stateStack.top(), production.lhs}];
+
+stateStack.push(gotoState); } else if (action == "acc") {
+
+return true;
+
+} else {
+
+return  false;
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+}
+
+}
+
+}
+
+
+
+int main() {
+
+initializeTables();
+
+
+
+// Example input: aab$
+
+vector<char> input = {'a', 'a', 'b','b','$'};
+
+
+
+if (parse(input)) {
+
+cout << "Input accepted." << endl; } else {
+
+cout  <<  "Input  rejected."  <<  endl;
+
+}
+
+
+
+return	0;
+
+}
+
+ 
+
+
+
+
+
+9.	Write a program in C or C++ to generate the three-address code.
+
+
+
+#include <iostream> #include <string> #include <stack>
+
+
+
+using namespace std;
+
+
+
+// Function to check if the character  is  an  operator bool isOperator(char c) {
+
+return (c == '+' || c == '-' || c == '*' || c == '/');
+
+}
+
+
+
+// Function to generate three-address code
+
+void		generateThreeAddressCode(const	string&	expression) { stack<string> operands;
+
+stack<char>	operators; int tempCounter = 1;
+
+
+
+for (char  c  :  expression)  { if (isalpha(c)) {
+
+operands.push(string(1, c)); // Convert char to string and push to stack
+
+} else if (isOperator(c)) {
+
+while (!operators.empty() && operators.top() !=
+
+ 
+
+' ( ' ) {
+
+ 
+
+
+
+char	op	=	operators.top(); operators.pop();
+
+string	operand2	=	operands.top(); operands.pop();
+
+string	operand1	=	operands.top();
+
+operands.pop();
+
+string	temp	=	"t"	+	to_string(tempCounter++); cout << temp << " = " << operand1 << " " << op
+
+ 
+
+<< " " << operand2 << endl;
+
+operands.push(temp);
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+' ( ' ) {
+
+ 
+
+}
+
+operators.push(c);
+
+} else if (c == '(') { operators.push(c); }
+
+else if (c == ')') {
+
+while (!operators.empty() && operators.top() !=
+
+
+
+char	op	=	operators.top(); operators.pop();
+
+string operand2 = operands.top();
+
+ 
+
+
+
+
+
+operands.pop();
+
+string	operand1	=	operands.top(); operands.pop();
+
+string	temp	=	"t"	+	to_string(tempCounter++);
+
+cout << temp << " = " << operand1 << " " << op
+
+<< " " << operand2 << endl;
+
+operands.push(temp);
+
+}
+
+operators.pop();	//	Pop	'('
+
+}
+
+}
+
+
+
+while   (!operators.empty())   { char	op	=	operators.top(); operators.pop();
+
+string	operand2	=	operands.top(); operands.pop();
+
+string	operand1	=	operands.top(); operands.pop();
+
+string temp = "t" + to_string(tempCounter++);
+
+cout << temp << " = " << operand1 << " " << op << " " << operand2 << endl;
+
+operands.push(temp);
+
+}
+
+}
+
+
+
+int main() {
+
+string expression;
+
+cout << "Enter the arithmetic expression: "; getline(cin, expression);
+
+cout << "Generated Three-Address Code:" << endl; generateThreeAddressCode(expression);
+
+
+
+return 0;
+
+}
+
+ 
+
+
+
+
+
+
+
+10.	Write a program in C or C++ to generate machine code from the abstract syntax tree generated by the parser.
+
+
+
+#include	<iostream> #include <stack>
+
+
+
+using namespace std;
+
+
+
+// Node structure for the Abstract Syntax Tree (AST) struct Node {
+
+char data; Node* left; Node* right;
+
+};
+
+
+
+// Function to create a new node Node* createNode(char data) {
+
+Node* newNode = new Node(); newNode->data = data;
+
+newNode->left = newNode->right = nullptr; return newNode;
+
+}
+
+
+
+// Function to generate machine code from AST and return the result
+
+// Function to generate machine code from AST and return the result
+
+int	generateMachineCode(Node*	root) { stack<int> machineStack;
+
+if (root) {
+
+int  leftResult  =  generateMachineCode(root->left);
+
+int	rightResult	=	generateMachineCode(root->right); switch (root->data) {
+
+case '+':
+
+return	leftResult	+	rightResult; case '-':
+
+return	leftResult	-	rightResult; case '*':
+
+return	leftResult	*	rightResult; case '/':
+
+return	leftResult	/	rightResult; default:
+
+return root->data - '0'; // Convert character
+
+to integer
+
+}
+
+}
+
+ 
+
+
+
+return 0; // Return 0 if root is null
+
+}
+
+
+
+
+
+int main() {
+
+// Example AST
+
+Node* root = createNode('+'); root->left = createNode('3'); root->right = createNode('*');
+
+root->right->left	=	createNode('4'); root->right->right = createNode('5');
+
+
+
+// Generate machine code and get result int result = generateMachineCode(root);
+
+
+
+// Output result
+
+cout << "Result: " << result << endl;
+
+
+
+return 0;
+
+}
+
+
+
+
+
